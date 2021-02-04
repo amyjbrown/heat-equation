@@ -7,6 +7,9 @@
 ! U(0, t) = (U1, t) = 0
 ! U(x, 0) = U0(x)
 program heat
+    use iso_fortran_env, only: &
+        stdin => input_unit
+    use common
     implicit none
     ! grid size for Space and Time
     integer, parameter :: &
@@ -54,33 +57,9 @@ program heat
         end do 
     end do
 
-    call print_array(arr=array, timestep=dt)
+    ! call print_array(arr=array, timestep=dt)
+    call write_array(array, "explicit.dat")
 
     contains
-        pure function U(x) result(retval)
-            ! Exponential function representing an exponential bump
-            ! on the range x: [0,1], t:[0,1]
-            implicit none
-            real, intent(in) :: x
-            real :: retval
-            
-            retval = exp(-((x - 0.5)) **2 )
-
-        end function U
-
-        subroutine print_array(arr, timestep)
-            real, dimension(:, :), intent(in) :: arr
-            real, intent(in) :: timestep
-            integer x, t
-            do t = 1, ubound(arr, dim=2)
-                write(*, fmt="(F5.1, 's:')", advance="no") timestep * t
-                
-                do x = 1, ubound(arr, dim=1)
-                    write(*, fmt="(F5.2)", advance='no') arr(x, t)
-                
-                enddo
-                write (*, *)
-            enddo
-        end subroutine print_array
 
 end program heat
